@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<style>
+		body {
+			display: flex;
+			display: -webkit-flex;
+			flex-wrap: wrap;
+		}
+
+		body .item {
+			width: 40%;
+		}
+
+		body .item img {
+			width: 50%;
+		}
+	</style>
+	<body>
+		<div class="item">
+			<img src="img/8323874_102621593000_2.jpg" />
+			<span>同源图片</span>
+			<button onclick="down_sources(this)" data-src="img/8323874_102621593000_2.jpg">下载图片</button>
+		</div>
+		<div class="item">
+			<img src="img/a7691515_s.jpg" />
+			<span>同源图片</span>
+			<button onclick="down_sources(this)" data-src='img/a7691515_s.jpg'>下载图片</button>
+		</div>
+		<div class="item">
+			<img src="http://k.zol-img.com.cn/sjbbs/7692/a7691515_s.jpg" />
+			<span>不同源图片</span>
+			<button onclick="down_difsources(this)" data-src="http://k.zol-img.com.cn/sjbbs/7692/a7691515_s.jpg">下载图片</button>
+		</div>
+	</body>
+	<script>
+		function down_sources(obj) { // 同源图片下载
+			var img_src = obj.getAttribute('data-src')
+			var a = document.createElement('a');
+			a.href = img_src; //图片地址
+			a.download = 'test'; // 图片名字
+			document.body.appendChild(a);
+			a.click();
+			document.body.removeChild(a);
+		}
+
+		function down_difsources(obj) { // 不同源图片下载
+			var url = obj.getAttribute('data-src')
+			var xmlhttp;
+			xmlhttp = new XMLHttpRequest();
+			xmlhttp.open("GET", url, true);
+			xmlhttp.responseType = "blob"; // 请求返回的数据类型
+			xmlhttp.onload = function() {
+				if (this.status == 200) {
+					var blob = this.response;
+					var img = document.createElement("img"); // 预览图片
+					img.onload = function(e) {
+						window.URL.revokeObjectURL(img.src);
+					};
+					img.src = window.URL.createObjectURL(blob);
+					document.body.appendChild(img);
+
+					var a = document.createElement('a'); // 下载图片
+					a.href = window.URL.createObjectURL(blob); //图片地址
+					a.download = 'test.jpg'; // 图片名字
+					document.body.appendChild(a);
+					a.click();
+					document.body.removeChild(a);
+				}
+			}
+			xmlhttp.send();
+		}
+
+		function down_img(img_src) { // 不同源图片下载
+			var a = document.createElement('a');
+			a.href = window.URL.createObjectURL(blob); //图片地址
+			a.download = row.studentId + '.jpg'; // 图片名字
+			document.body.appendChild(a);
+			a.click();
+			document.body.removeChild(a);
+		}
+	</script>
+</html>
